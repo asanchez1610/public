@@ -1,0 +1,99 @@
+body{
+	margin: 15px !important;
+	background: #f5f5f5;
+}
+
+.header-formulario{
+	padding-top: 15px;
+	padding-bottom: 15px;
+	text-transform: uppercase;
+}
+
+.panel-heading .panel-title{
+	font-size: 16px;
+}
+
+.panel-body legend{
+	font-size: 16px;
+}
+
+.form-horizontal .form-control{
+	font-size: 14px;
+}
+
+.form-horizontal select , option{
+	font-size: 14px;
+	color: #000;
+}
+
+.control-label{
+	color: #000;
+	text-transform: uppercase;
+}
+
+#descripcion{
+	height: 110px;
+}
+
+.col-lg-8 .radio{
+	display: inline-block;margin: 0px 10px 0px 0px;
+}
+
+.text-muted{
+	color: #000;
+	font-size: 15px;
+}
+
+.btnBuscarSmall {
+	background-image: url(../images/buscar_16.png) !important;
+}
+
+.columna-registro-cierre-calle-left{
+	width: 45.5%;
+	display: inline-block;
+	vertical-align: text-top;
+}
+
+.columna-registro-cierre-calle-right{
+	width: 54%;
+	display: inline-block;
+	vertical-align: text-top;
+}
+
+a:HOVER {
+	text-decoration: none;
+}
+
+a:FOCUS {
+	text-decoration: none;
+}
+
+
+
+.btnRemovemall {
+	background-image: url(../images/remove_16.png) !important;
+}
+
+.btnAddSmall {
+	background-image: url(../images/add_16.png) !important;
+}
+
+.exportExcel {
+	background-image: url(../images/excel_16.png) !important;
+}
+
+.btnEditSmall {
+	background-image: url(../images/edit_16.png) !important;
+}
+
+
+.mask-loading-main{
+	position: absolute;
+	width: 100%;
+	z-index: 150;
+	background: #000;
+	height: 700px; 	
+	color:#fff;
+	top: 0px;
+	left: 0px;
+}
