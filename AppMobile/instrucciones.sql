@@ -1,23 +1,36 @@
-
 /*
-Descripción de la Aplicacion:
-La herramienta del formulario de cierre de calles es una aplicacion desarrollada en java web con los siguientes frameworks de desarrollo:
+-- ENGLISH:
+	Application description:
+	Our Road Closure Registration tool that automatically generates a Waze-consumable feed is a java-based application that has been developed using the following frameworks:
+	Backend:
+	-Spring 4
+	-Myibatis
+	Frontend
+	-ExtJs
+	-Jquery
+	-Bootstrap 3
+	The original DBMS for our actual implementation is DB2, but the script can be taylored to support other DBMSs.
+	The application is deployed in a Tomcat 7 server with JDK 7.
+	We used Eclipse as IDE for the development (version Mars). 
+	However there is no problem with using other IDES like netbeans for instance, since this application has been developed conforming the MAVEN standards.
 
-Backend:
--Spring 4
--Myibatis
 
-Frontend
--ExtJs
--Jquery
--Bootstrap 3
+-- ESPAÑOL:
+	Descripción de la Aplicacion:
+	La herramienta del formulario de cierre de calles es una aplicacion desarrollada en java web con los siguientes frameworks de desarrollo:
+	Backend:
+	-Spring 4
+	-Myibatis
+	Frontend
+	-ExtJs
+	-Jquery
+	-Bootstrap 3
+	La base de datos en la cual se desarrollo la aplicación es DB2.
+	La aplicacion esta montada en servidor tomcat 7, con JDK 7.
+	El IDE de desarrollo en el cual se implemento la aplicación fue eclipse en la version Mars, 
+	sin embargo no existe ningun inconveniente en ejecutarlo en otros IDES como netbeans por ejemplo, debido a que dicha aplicación
+	esta soportada bajo el estandares de MAVEN.
 
-La base de datos en la cual se desarrollo la aplicación es DB2.
-La aplicacion esta montada en servidor tomcat 7, con JDK 7.
-
-El IDE de desarrollo en el cual se implemento la aplicación fue eclipse en la version Mars, 
-sin embargo no existe ningun inconveniente en ejecutarlo en otros IDES como netbeans por ejemplo, debido a que dicha aplicación
-esta soportada bajo el estandares de MAVEN.
 */
 -----------------------------------------------------------------------
 --SCRIPT DE TABLAS
