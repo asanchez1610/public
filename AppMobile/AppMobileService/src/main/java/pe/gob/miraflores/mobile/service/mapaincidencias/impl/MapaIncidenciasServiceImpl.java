@@ -1,10 +1,11 @@
 package pe.gob.miraflores.mobile.service.mapaincidencias.impl;
 
 import java.io.File;
+
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,28 +22,20 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import pe.gob.miraflores.mobile.constantes.MobileConstantes;
-import pe.gob.miraflores.mobile.dao.detalleincidencia.GeoDetalleIncidenciaMapper;
 import pe.gob.miraflores.mobile.dao.mapaincidencias.GeometriaLineaMapper;
 import pe.gob.miraflores.mobile.dao.mapaincidencias.MapaIncidenciasGeometriaMapper;
 import pe.gob.miraflores.mobile.dao.mapaincidencias.MapaIncidenciasRegistroMapper;
-import pe.gob.miraflores.mobile.domain.catalogo.Catalogo;
-import pe.gob.miraflores.mobile.domain.detalleincidencia.GeoDetalleIncidencia;
-import pe.gob.miraflores.mobile.domain.detalleincidencia.GeoDetalleIncidenciaCriteria;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.GeometriaLinea;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.GeometriaLineaCriteria;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.MapaIncidenciasGeometria;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.MapaIncidenciasGeometriaCriteria;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.MapaIncidenciasRegistro;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.MapaIncidenciasRegistroCriteria;
-import pe.gob.miraflores.mobile.domain.parametrosistema.ParametroSistema;
 import pe.gob.miraflores.mobile.service.catalogo.LocalCatalogoService;
 import pe.gob.miraflores.mobile.service.email.EmailService;
 import pe.gob.miraflores.mobile.service.mapaincidencias.MapaIncidenciasService;
-import pe.gob.miraflores.mobile.service.parametrosistema.ParametroSistemaService;
-import pe.gob.miraflores.mobile.util.Util;
 
 @Service
 public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
@@ -52,15 +45,9 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 
 	@Autowired
 	private MapaIncidenciasGeometriaMapper mapaIncidenciasGeometriaMapper;
-	
-	@Autowired 
-	private GeoDetalleIncidenciaMapper geoDetalleIncidenciaMapper;
 
 	@Autowired
 	private LocalCatalogoService catalogoService;
-	
-	@Autowired
-	private ParametroSistemaService parametroSistemaService;
 	
 	@Autowired
 	private EmailService emailService;
@@ -68,12 +55,6 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 	@Autowired
 	private GeometriaLineaMapper geometriaLineaMapper;
 	
-	public String buildJsonRestWaze(Map<String, Object> params) throws Exception {
-		// TODO Auto-generated method stub
-		String action = MobileConstantes.URL_JSON_WAZE;
-		String strJson = Util.getUrlRemote(action);
-		return strJson;
-	}
 
 	public MapaIncidenciasRegistro registrar(MapaIncidenciasRegistro incidencia) throws Exception {
 		// TODO Auto-generated method stub
@@ -300,25 +281,7 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 	 * DOLPHIN
 	 * */
 	
-	public String buildJsonRestDolphin() throws Exception {
-		// TODO Auto-generated method stub
-		
-		StringBuilder query = new StringBuilder();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-		String dActual = sdf.format(new Date());
-		query.append(MobileConstantes.ID_USER_DOLPHIN).append(MobileConstantes.CLI_SALT).append(dActual);
-		
-		MessageDigest md = MessageDigest.getInstance("MD5");
-        byte[] array = md.digest(query.toString().getBytes());
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < array.length; ++i) {
-          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
-       }
-		
-		String action = MobileConstantes.URL_JSON_DOLPHIN+sb.toString()+MobileConstantes.URL_JSON_DOLPHIN_END;
-		String strJson = Util.getUrlRemote(action);
-		return strJson;
-	}
+
 
 	@Override
 	public List<MapaIncidenciasRegistro> listaInicdenciasVoxiva(MapaIncidenciasRegistro incidencia) throws Exception {
@@ -348,21 +311,6 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 		return incidencias;
 	}
 	
-	@Override
-	public GeoDetalleIncidencia obtenerDetalleIncidencia(Integer issi) throws Exception {
-
-		GeoDetalleIncidencia detalle = null;
-		GeoDetalleIncidenciaCriteria c = new GeoDetalleIncidenciaCriteria();
-		c.createCriteria().andIssiEqualTo(issi);
-		
-		List<GeoDetalleIncidencia> listGeoDetalle = geoDetalleIncidenciaMapper.selectByExample(c);
-		
-		if(listGeoDetalle!=null && listGeoDetalle.size()>0){
-			detalle = listGeoDetalle.get(0);
-		}
-		
-		return detalle;
-	}
 
 	@Override
 	public MapaIncidenciasRegistro obtenerIncidenciaPorId(Integer id) throws Exception {
@@ -478,117 +426,9 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 		
 	}
 
-	public void enviarAlertasCierreCalle() throws Exception {
-		// TODO Auto-generated method stub
-		
-		System.out.println("inicio");
-		
-		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		Map<String, Object> params = new HashMap<String, Object>();
-		String strNow = sdf.format(now); 
-		params.put("FECHA_FIN", strNow);
-		List<MapaIncidenciasRegistro> list = mapaIncidenciasRegistroMapper.cierreCallesPorVencer(params);
-		
-		Map<String, Object> paramsPorIniciar = new HashMap<String, Object>();
-		paramsPorIniciar.put("FECHA_INI", strNow);
-		List<MapaIncidenciasRegistro> listPorIniciar = mapaIncidenciasRegistroMapper.cierreCallesPorIniciar(paramsPorIniciar);
-
-		
-		
-	}
+	public void enviarAlertasCierreCalle() throws Exception {}
 	
-	private void enviarNotificacion(List<MapaIncidenciasRegistro> list,String tipo,Date now) throws Exception{
-		
-		List<String> calles = null;
-		
-		List<MapaIncidenciasGeometria> geometrias = null;
-		
-		MapaIncidenciasGeometriaCriteria criteriaGeo = null;
-		
-		Catalogo tipoEvento = null;
-		
-		String tipoCierre = "";
-		
-		Integer countRegistros = 0;
-		
-		List<Catalogo> emailsCatalogo = null;
-		
-		if(list != null){
-			
-			int diasFaltantes;
-			ParametroSistema parametroVencimiento = parametroSistemaService.obtenerParametroSistemaById(MobileConstantes.PARAMETRO_NUM_DIAS_VENCIMIENTO_CIERRA_CALLE);
-			SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
-			String mensaje = "<table style=\"border-top:1px #ccc solid;border-left:1px #ccc solid;border-right:1px #ccc solid;width:100%;font-family:Verdana;text-align:left;font-size:12px;\" cellpadding=\"0\" cellspacing=\"0\">";
-			mensaje+="<tr><th style=\"padding:5px;background:#f5f5f5;border-right:1px #ccc solid;border-bottom:1px #ccc solid;\">TIPO DE EVENTO</th><th style=\"padding:5px;background:#f5f5f5;border-right:1px #ccc solid;border-bottom:1px #ccc solid;\">DESCRIPCIÓN</th><th style=\"padding:5px;background:#f5f5f5;border-right:1px #ccc solid;border-bottom:1px #ccc solid;\" >INICIO</th><th style=\"padding:5px;background:#f5f5f5;border-right:1px #ccc solid;border-bottom:1px #ccc solid;\" >VENCIMIENTO</th><th style=\"padding:5px;background:#f5f5f5;border-bottom:1px #ccc solid;\" >CALLES</th></tr>";
-			for (MapaIncidenciasRegistro m : list) {
-				 
-				diasFaltantes = Util.daysBetween(now, m.getFecHoraFin());
-				
-				if(diasFaltantes<=Integer.parseInt(parametroVencimiento.getValor().trim())){
-					
-					criteriaGeo = new MapaIncidenciasGeometriaCriteria();
-					criteriaGeo.clear();
-					criteriaGeo.createCriteria().andIdecodvalorEqualTo(m.getIdIncidencia()).andIdecodidentEqualTo(MobileConstantes.TABLA_MAPA_INCIDENCIAS);
-				
-					geometrias = mapaIncidenciasGeometriaMapper.selectByExample(criteriaGeo);
-					calles = new ArrayList<String>();
-					for (MapaIncidenciasGeometria g : geometrias) {
-						calles.add(g.getDesdireccion());
-					}
-					
-					tipoEvento = catalogoService.findCatalogoById(m.getTipoEvento());
-					
-					
-					if(m.getTipoEvento() == 8749){
-						if(m.getTipoCierre()!=null){
-						tipoCierre = "("+(m.getTipoCierre().equalsIgnoreCase("T")?"<span style=\"color:red;\">Cierre Total</span>":"<span style=\"color:green;\">Cierre Parcial</span>")+")";
-						}else{
-							tipoCierre="<span style=\"color:green;\">Cierre Parcial</span>";
-						}
-					}else{
-						tipoCierre ="";
-					}
-					
-					mensaje+="<tr>"
-								+ "<td style=\"padding:5px;border-right:1px #ccc solid;border-bottom:1px #ccc solid;font-size:13px;\">"+tipoEvento.getDesNombre()+" "+tipoCierre+"</td>"
-								+ "<td style=\"padding:5px;border-right:1px #ccc solid;border-bottom:1px #ccc solid;font-size:13px;\">"+m.getDescripcion()+"</td>"
-								+ "<td style=\"padding:5px;border-right:1px #ccc solid;border-bottom:1px #ccc solid;font-size:13px;\" >"+sdf2.format(m.getFecHoraInicio())+"</td>"
-								+ "<td style=\"border-bottom:1px #ccc solid;padding:5px;border-right:1px #ccc solid;font-size:13px;\" >"+sdf2.format(m.getFecHoraFin())+"</td>"
-								+ "<td style=\"padding:5px;border-bottom:1px #ccc solid;font-size:13px;\" >"+StringUtils.join(calles, ", ")+"</td>"
-							+ "</tr>";
-				
-				countRegistros++;
-					
-				}
-				
-			}
-			
-			mensaje+="</table>";
-			
-			mensaje ="<p>Estimado Usuario los siguientes registros de cierre de calles estan por vencer en pocos dias:</p>"+mensaje+""
-					+ "<p>Para acceder a la consulta de cierre de calles hacer click <a href=\"http://digital.miraflores.gob.pe:8080/mobileApps/cierre-calles/consulta-cierre-calles\">aqui</a></p>";
-			
-			if(countRegistros > 0){
-				
-				emailsCatalogo = catalogoService.findCatalogoByGrupo(MobileConstantes.GRUPO_EMAILS_NOTI_CIERRE_CALLES);
-				
-				if(emailsCatalogo != null){
-					String[] arrMails = new String[emailsCatalogo.size()];
-					Catalogo emailCatalogo = null;
-					for(int i = 0 ; i < emailsCatalogo.size() ; i++){
-						emailCatalogo = emailsCatalogo.get(i);
-						arrMails[i] = emailCatalogo.getDesNombre();
-					}
-					emailService.enviarCorreo(arrMails, "Notificación de vencimiento de cierre de calles", mensaje);
-				}
-				
-			}
-			
-			
-		}
-	}
+	private void enviarNotificacion(List<MapaIncidenciasRegistro> list,String tipo,Date now) throws Exception{}
 
 	@Override
 	public File exportarExcelBandejaCierreCalles(MapaIncidenciasRegistro incidencia) throws Exception {
@@ -733,6 +573,18 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 	
 		
 	
+	}
+
+	@Override
+	public String buildJsonRestWaze(Map<String, Object> params) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String buildJsonRestDolphin() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

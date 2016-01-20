@@ -1,10 +1,10 @@
 package pe.gob.miraflores.mobile.service.mapaincidencias;
 
 import java.io.File;
+
 import java.util.List;
 import java.util.Map;
 
-import pe.gob.miraflores.mobile.domain.detalleincidencia.GeoDetalleIncidencia;
 import pe.gob.miraflores.mobile.domain.mapaincidencias.MapaIncidenciasRegistro;
 
 public interface MapaIncidenciasService {
@@ -23,7 +23,6 @@ public interface MapaIncidenciasService {
 	
 	public String buildJsonRestDolphin() throws Exception;
 
-	public GeoDetalleIncidencia obtenerDetalleIncidencia(Integer issi) throws Exception;
 	
 	public List<MapaIncidenciasRegistro> listaInicdenciasVoxiva(MapaIncidenciasRegistro incidencia) throws Exception;
 	

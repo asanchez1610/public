@@ -50,22 +50,6 @@ public class CierreCallesController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(value = "/waze-service")
-	public void getCatalogo(Integer idGrupo, HttpServletResponse response)
-			throws Exception {
-		try {
-			
-			PrintWriter writer = response.getWriter();
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			String jsonStr = mapaIncidenciasService.buildJsonRestWaze(null);
-			if (!StringUtils.isEmpty(jsonStr)) {
-				writer.write(jsonStr);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	@RequestMapping(value = "/waze-service-xmlformat")
 	public ModelAndView listaIncidenciasWazeXmlFormat(MapaIncidenciasRegistro incidencia)
@@ -102,59 +86,7 @@ public class CierreCallesController {
 		}
 		return data;
 	}
-	
-	/* *
-	 * TETRA DOLPHIN CONSUME
-	 * 25/11/2015
-	 * */
 
-	@RequestMapping(value = "/dolphin-service")
-	public void getJSONDolphin(HttpServletResponse response)
-			throws Exception {
-		try {
-			
-			PrintWriter writer = response.getWriter();
-			response.setContentType("application/json");
-			response.setCharacterEncoding("UTF-8");
-			String jsonStr = mapaIncidenciasService.buildJsonRestDolphin();
-			if (!StringUtils.isEmpty(jsonStr)) {
-				writer.write(jsonStr);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@RequestMapping(value = "/obtener-detalle-incidencia")
-	public @ResponseBody
-	Map<String, ? extends Object> obtenerDetalleIndicencia(Integer issi) throws Exception {
-		Map<String, Object> data = new HashMap<String, Object>();
-		try {
-
-			data.put("data", mapaIncidenciasService.obtenerDetalleIncidencia(issi));
-			data.put("success", Boolean.TRUE);
-		} catch (NegocioException e) {
-			data.put("success", Boolean.FALSE);
-			data.put("message", e.getMessage());
-		} catch (Exception e) {
-			// TODO: handle exception
-			data.put("success", Boolean.FALSE);
-			data.put("message", "Error al intentar registrar los datos.");
-			e.printStackTrace();
-		}
-		return data;
-	}
-	
-	
-	/* *
-	 * Mapa de Incidencias
-	 * 26/10/2015
-	 * */
-	@RequestMapping(value = "/mapa")
-	public ModelAndView mapaIncidencias() {
-		ModelAndView modelAndView = new ModelAndView("public/mapaIncidencias");
-		return modelAndView;
-	}
 	
 	@RequestMapping(value = "/bandeja-cierre-calles")
 	public ModelAndView bandejaCierreCalles() {
