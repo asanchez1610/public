@@ -59,6 +59,7 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 	public MapaIncidenciasRegistro registrar(MapaIncidenciasRegistro incidencia) throws Exception {
 		// TODO Auto-generated method stub
 		
+		
 		if(incidencia.getIdIncidencia() == null){
 			Date now = new Date();
 			incidencia.setFecRegistra(now);
@@ -428,8 +429,6 @@ public class MapaIncidenciasServiceImpl implements MapaIncidenciasService {
 
 	public void enviarAlertasCierreCalle() throws Exception {}
 	
-	private void enviarNotificacion(List<MapaIncidenciasRegistro> list,String tipo,Date now) throws Exception{}
-
 	@Override
 	public File exportarExcelBandejaCierreCalles(MapaIncidenciasRegistro incidencia) throws Exception {
 		// TODO Auto-generated method stub

@@ -30,6 +30,30 @@
 	El IDE de desarrollo en el cual se implemento la aplicación fue eclipse en la version Mars, 
 	sin embargo no existe ningun inconveniente en ejecutarlo en otros IDES como netbeans por ejemplo, debido a que dicha aplicación
 	esta soportada bajo el estandares de MAVEN.
+	NOTAS: 
+	
+	1. El servicio que proporciona información para la aproximación de calles, se encuentra ubicado en el siguiente enlace como ejemplo:
+	http://digital.miraflores.gob.pe:8080/MirafloresV1/obtenergeoreferenciaxvia.muni?query=larco 4&start=0&limit=100
+	
+	el cual traera la siguiente respuesta en formato json:
+	{
+		total: 0,
+		data: [
+			{
+			tipo: "AVENIDAS",
+			toponimia: "AV. JOSE A. LARCO",
+			cdra: "4",
+			gid: 478,
+			punto: "-77.0290672344261 -12.121864951297",
+			poligono: "-77.0290399232 -12.1214598600923,-77.029094545835 -12.1222700424757"
+			}
+		]
+	}
+	
+	El ejemplo nos aproxima a la cuadra 4 de la av. larco en miraflores, con la geolocalizacion correspondiente a esta dirección
+	
+	2. En el formulario de registro existe una casilla de verificacion llamada visible, esta opción nos permite ocultar aquellos 
+	registros que no deseemos que se muestren en el fit de waze.
 
 */
 -----------------------------------------------------------------------
@@ -84,7 +108,8 @@ CREATE TABLE GEO_INCIDENCIA_MAP
    TIPO_CIERRE varchar(1),
    DES_CALLLES varchar(700),
    USUARIO_REGISTRO int,
-   USUARIO_MODIFICA int
+   USUARIO_MODIFICA int,
+   VISIBLE varchar(1)
 )
 ;
 CREATE TABLE GEO_MAP_INICIDENCIA_LINEA

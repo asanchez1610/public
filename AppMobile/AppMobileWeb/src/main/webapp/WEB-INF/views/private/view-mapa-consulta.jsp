@@ -274,12 +274,12 @@ window.onload = function(){
 </head>
 <body>
 
-<div id="map" style="width:62%;height: 420px; float: left;">
+<div id="map" style="width:62%;height: 400px; float: left;">
 
 <img src="/mobileApps/images/loading_2.gif" style="float: left;margin:130px 0px 0px 170px;" />
 
 </div>
-<div style="float: left;width:38%;height: 420px;padding: 0px 0px 0px 15px;">
+<div style="float: left;width:38%;height: 400px;padding: 0px 0px 0px 15px;">
 
 <div style="float: left;width: 100%;padding: 0px 0px 10px 0px;line-height: 20px;">
 <b>Fecha Inicio : </b><span id="fecIni">Cargando...</span><br>
@@ -287,7 +287,7 @@ window.onload = function(){
 </div>
 
 <h1 style="font-size: 16px;padding: 0px 0px 0px 0px;margin: 0px 0px 5px 0px;">DESCRIPCIÓN</h1>
-<div style="overflow-x:hidden; overflow-y:scroll;">
+<div style="overflow-x:hidden; overflow-y:auto;">
 <p id="content-descripcion" style="line-height: 21px;text-align: justify;height: 338px;">Espere un momento por favor...</p>
 </div>
 </div>

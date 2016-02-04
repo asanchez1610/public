@@ -2,8 +2,15 @@
 var FormularioCierreCalles = {
 		markersSelectors:[],
 		
-		openWindowGeoLinea:function(){
+		openWindowGeoLinea:function(options){
 		
+			options  = options || {};
+			
+			var record	=	options.record || {};
+			var index 	=	options.index;
+			
+			var data	=	(record.data || {});
+			console.log(data);
 			
 			var direccionFinalStore = Ext.create('Ext.data.Store', {
 			    fields: ['name', 'value'],
@@ -30,6 +37,7 @@ var FormularioCierreCalles = {
 			    forceSelection:true,
 			    displayField: 'name',
 			   	width : (720/2),
+			   	value:data.dirCardinal,
 			    valueField: 'value',
 			    allowBlank:false
 			});
@@ -108,21 +116,125 @@ var FormularioCierreCalles = {
 							
 								afterrender:function(){
 								
+									if(record.data){
+										
+									setTimeout(function(){
+										
+										flightPathLineaTemp=null;
+				    					FormularioCierreCalles.arrMarkerLineaTemp = [];
+			            	  				       
+				    					var myLatlng = new google.maps.LatLng(parseFloat(data.pointIni.split(' ')[0]),parseFloat(data.pointIni.split(' ')[1]));
+			
+										var myOptions = {
+											zoom : 16,
+											center : myLatlng,
+											mapTypeId : google.maps.MapTypeId.ROADMAP
+										};
+									
+										var map = new google.maps.Map(document.getElementById('mapa-selector-linea'), myOptions);
+				    					
+									    var markerEl = new google.maps.Marker({
+									        position: myLatlng, 
+									        map: map,
+													animation : google.maps.Animation.DROP,
+													draggable : true
+									    });
+								
+									    FormularioCierreCalles.arrMarkerLineaTemp.push(markerEl);
+									    
+									    
+									     var markerEl2 = new google.maps.Marker({
+									        position: new google.maps.LatLng(parseFloat(data.pointFin.split(' ')[0]),parseFloat(data.pointFin.split(' ')[1])), 
+									        map: map,
+													animation : google.maps.Animation.DROP,
+													draggable : true
+									    });
+								
+									    FormularioCierreCalles.arrMarkerLineaTemp.push(markerEl2);
+									    
+									    
+									    	
+								    	var flightPlanCoordinates=[];
+								    	
+								    	Ext.each(FormularioCierreCalles.arrMarkerLineaTemp,function(m){
+								    	
+								    			flightPlanCoordinates.push({lat: m.position.lat(), lng: m.position.lng()});
+								    	
+								    	});
+								    	
+								    	flightPathLineaTemp = new google.maps.Polyline({
+										    path: flightPlanCoordinates,
+										    geodesic: true,
+										    strokeColor: '#0C6BB5',
+									        strokeOpacity: 0.6,
+									        strokeWeight: 6
+										  });
+										
+										  flightPathLineaTemp.setMap(map);
+									    
+									    
+									    
+									     google.maps.event.addListener(markerEl, 'dragend', function(event) {																		
+											if(flightPathLineaTemp){
+									     		
+									     		var flightPlanCoordinates2=[];
+									    	
+									    	Ext.each(FormularioCierreCalles.arrMarkerLineaTemp,function(m){
+									    	
+									    			flightPlanCoordinates2.push({lat: m.position.lat(), lng: m.position.lng()});
+									    	
+									    	});
+									    	
+									    	flightPathLineaTemp.setPath(flightPlanCoordinates2);
+									     		
+											}
+									     	//event.latLng.lat()
+											
+										});
+										
+										google.maps.event.addListener(markerEl2, 'dragend', function(event) {																		
+											if(flightPathLineaTemp){
+									     		
+									     		var flightPlanCoordinates2=[];
+									    	
+									    	Ext.each(FormularioCierreCalles.arrMarkerLineaTemp,function(m){
+									    	
+									    			flightPlanCoordinates2.push({lat: m.position.lat(), lng: m.position.lng()});
+									    	
+									    	});
+									    	
+									    	flightPathLineaTemp.setPath(flightPlanCoordinates2);
+									     		
+											}
+									     	//event.latLng.lat()
+											
+										});
+									    
+											
+										
+				
+		
+				    					
+			            	  		
+			            	  		},100);
+										
+									}else{
+										
 									setTimeout(function(){
 									
-											var config = {
-			            	  			lat:-12.121084126455873,
-			            	  			lon:-77.02935755252838,
-			            	  			idContent:'mapa-selector-linea',
-			            	  			zoom:18
-			            	  			
-			            	  		}
-			            	  		
-			            	  	
-			            	  		FormularioCierreCalles.buildMapaSelectorLinea(config);
+										var config = {
+				            	  			lat:-12.121084126455873,
+				            	  			lon:-77.02935755252838,
+				            	  			idContent:'mapa-selector-linea',
+				            	  			zoom:18
+				            	  			
+				            	  		}
+				            	  	
+				            	  		FormularioCierreCalles.buildMapaSelectorLinea(config);
 										
 									},100);
-									
+										
+									}
 									
 								}
 								
@@ -142,7 +254,8 @@ var FormularioCierreCalles = {
 										width : (720/2),
 										allowBlank:false,
 										name:'desCalle',
-										id:'desCalleLinea'
+										id:'desCalleLinea',
+										value:data.desCalle
 									},
 									cbxDireccionFinal
 									,
@@ -152,7 +265,8 @@ var FormularioCierreCalles = {
 										width : (720/2),
 										style:'margin-top:10px;',
 										name:'interseccion1',
-										id:'interseccion1'
+										id:'interseccion1',
+										value:data.intercepcion1
 									}
 									,
 									{
@@ -162,7 +276,8 @@ var FormularioCierreCalles = {
 										style:'margin-top:10px;',
 										labelStyle:'padding-left:15px;',
 										name:'interseccion2',
-										id:'interseccion2'
+										id:'interseccion2',
+										value:data.intercepcion2
 									}
 							]
 						}
@@ -186,9 +301,8 @@ var FormularioCierreCalles = {
 											
 											var values = Ext.getCmp('form-geolinea').getForm().getValues();
 											
-											console.log(values)
-										
-											var record = Ext.create('PolyLine',{
+
+											var rec = Ext.create('PolyLine',{
 																				desCalle:values.desCalle
 																				,intercepcion1:values.interseccion1
 																				,intercepcion2:values.interseccion2
@@ -196,8 +310,18 @@ var FormularioCierreCalles = {
 																				,pointIni:FormularioCierreCalles.arrMarkerLineaTemp[0].position.lat()+' '+FormularioCierreCalles.arrMarkerLineaTemp[0].position.lng()
 																				,pointFin:FormularioCierreCalles.arrMarkerLineaTemp[1].position.lat()+' '+FormularioCierreCalles.arrMarkerLineaTemp[1].position.lng()
 																				});
+											
+											if(record.data){
+												
+												Ext.getCmp('grid-mapa-linea-selector').store.remove(record);
+												Ext.getCmp('grid-mapa-linea-selector').store.insert(index,rec)
+												
+											}else{
 					    																						
-					    					Ext.getCmp('grid-mapa-linea-selector').store.add(record);
+					    						Ext.getCmp('grid-mapa-linea-selector').store.add(rec);
+												
+											}
+											
 											Ext.getCmp('win-geolinea').close();
 										}
 										
@@ -322,14 +446,19 @@ var FormularioCierreCalles = {
 					formValues.tipoCierre = 'P';
 				}
 				
-				//console.log(formValues);
-				if(parent.window && parent.window.IDE_USUARIO_MAIN_JSP){
-					formValues.IdUsuarioSesion = parent.window.IDE_USUARIO_MAIN_JSP;
+				if(Ext.getCmp('chkVisible').checked){
+					formValues.visible = 'S';
 				}else{
-					formValues.IdUsuarioSesion = 3;
+					formValues.visible = 'N';
 				}
 				
-				console.log(formValues);
+				//console.log(formValues);
+				if(parent.IDE_USUARIO_MAIN_JSP){
+					formValues.idUsuarioSesion = parent.IDE_USUARIO_MAIN_JSP;
+				}else{
+					formValues.idUsuarioSesion = 3;
+				}
+				
 				
 				Ext.get('main-content').mask('Obteniendo Datos.');
 						
@@ -396,13 +525,10 @@ var FormularioCierreCalles = {
 			Ext.each(config.data,function(item,index){
 			
 				var flightPlanCoordinates = [];
-			    console.log('ver el item');
-			    console.log(item)
 				flightPlanCoordinates.push({lat: parseFloat(item.pointIni.split(' ')[0]), lng: parseFloat(item.pointIni.split(' ')[1])});
 				
 				flightPlanCoordinates.push({lat: parseFloat(item.pointFin.split(' ')[0]), lng: parseFloat(item.pointFin.split(' ')[1])});
 				
-				console.log(flightPlanCoordinates)
 						
 				  var flightPath = new google.maps.Polyline({
 				    path: flightPlanCoordinates,
@@ -574,9 +700,6 @@ var FormularioCierreCalles = {
 			    
 			     google.maps.event.addListener(markerEl, 'dragend', function(event) {																		
 					if(flightPathLineaTemp){
-			     		console.log(event)
-			     		console.log(flightPathLineaTemp.getPath())
-			     		console.log(flightPathLineaTemp.setPath)
 			     		
 			     		var flightPlanCoordinates2=[];
 			    	
@@ -848,9 +971,7 @@ var FormularioCierreCalles = {
 			     				mapping:'dirCardinal',
 			     				convert:function(v,r,o){
 			     					var value = '';
-			     				console.log(r.data.dirCardinal)
 			     					for(var i = 0 ; i < arrcardinales.length ; i++){
-			     						console.log(arrcardinales[i].value)
 			     						if(arrcardinales[i].value == r.data.dirCardinal  ){
 			     							value = arrcardinales[i].name;
 			     							break;
@@ -996,6 +1117,15 @@ var FormularioCierreCalles = {
 			                    
 			            ]
 			        }
+			});
+			
+			grid.on('itemdblclick',function(thisGrid, record, item, index, e, eOpts){
+				
+				FormularioCierreCalles.openWindowGeoLinea({
+					record:record
+					,index:index
+				});
+				
 			});
 			
 //				grid.on('edit', function(editor, e) {
@@ -1224,6 +1354,9 @@ var FormularioCierreCalles = {
 	
 		init : function(){
 
+			console.log('sesion parent user ->'+parent.IDE_USUARIO_MAIN_JSP);
+			console.log('sesion parent window user ->'+parent.window.IDE_USUARIO_MAIN_JSP);
+			
 			var sveridadStore = Ext.create('Ext.data.Store', {
 						    fields: ['name', 'value'],
 						    data : [
@@ -1454,6 +1587,18 @@ var FormularioCierreCalles = {
 		                    width:105,
 		                    disabled:true
 		                }
+		                ,
+		                {
+		                    boxLabel  : '<span style="font-weight: normal;">Visible?</span>',
+		                    name      : 'visible',
+		                    inputValue: 'S',
+		                    hidden : (parent.IDE_ROL_MAIN_JSP == 6?false:true),
+		                    id        : 'chkVisible',
+		                    xtype:'checkboxfield',
+		                    boxLabelAlign :'before',
+		                    style:'margin: 0px 0px 0px 25px;',
+		                    width:70
+		                }
 						,
 						cbxDireccionFinal
 						,
@@ -1506,7 +1651,6 @@ var FormularioCierreCalles = {
 											Ext.get('main-content').unmask();
 											var response = Ext.decode(http.responseText);
 											
-											console.log(response);
 											
 											if(response.incidencia){
 												var incidencia = response.incidencia;
@@ -1548,6 +1692,13 @@ var FormularioCierreCalles = {
 					                    		
 					                    		}
 					                    		
+					                    		if(incidencia.visible == 'S'){
+														Ext.getCmp('chkVisible').checked = true;
+														Ext.getCmp('chkVisible').setRawValue(true)
+					            	  			}
+					                    		
+					                    		
+					                    		
 					                    		Ext.getCmp('cbxSeveridad').setValue(incidencia.severidad);
 					                    		
 					                    		Ext.getCmp('cbxdireccionFinal').setValue(incidencia.direccionFinal);
@@ -1573,7 +1724,6 @@ var FormularioCierreCalles = {
 												});
 					                    			
 					                    		}else{
-					                    			console.log(incidencia.lineas)
 					                    			Ext.each(incidencia.lineas,function(item){
 					                    			
 					                    				var record = Ext.create('PolyLine',item);

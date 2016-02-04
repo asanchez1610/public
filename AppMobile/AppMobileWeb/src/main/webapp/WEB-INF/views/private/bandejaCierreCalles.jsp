@@ -11,28 +11,39 @@ var IS_CONSULTA = (MODO_CONSULTA=='1'?true:false);
 <title>Cierre de Calles</title>
 <!-- API Google Maps -->
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&oe=utf8"></script>
+<style type="text/css">
+
+.btn-exportar-tool span{
+color:#333;
+}
+
+</style>
 </head>
 <body id="app_sesion">
 <div class="bandeja-container-sesion">
 
-<div class="bs-callout bs-callout-info"> <h4>
+<div class="bs-callout bs-callout-info"> 
 
-<c:choose>
-    <c:when test="${modoConsulta == '1'}">
-        Consulta de Cierre de Calles
-    </c:when>
-    <c:when test="${modoConsulta == '0'}">
-        Bandeja de Registro de Cierre de Calles
-    </c:when>
-    <c:otherwise>
-        
-    </c:otherwise>
-</c:choose>
+	<h4>
+	<c:choose>
+	    <c:when test="${modoConsulta == '1'}">
+	        Consulta de Cierre de Calles
+	    </c:when>
+	    <c:when test="${modoConsulta == '0'}">
+	        Bandeja de Registro de Cierre de Calles
+	    </c:when>
+	    <c:otherwise>
+	        
+	    </c:otherwise>
+	</c:choose>
+	</h4>
+ 
+</div>
 
-</h4> </div>
+	
+<div id="busqueda-responsive" class="bs-callout" style="padding-bottom: 5px;display: none;"></div>
+<div style="100%;" id="content-grid"></div>
 
-	<div style="100%;" id="content-grid">
-	</div>
 </div>
 
 <form id="form_exportar_excel" method="post" action="/mobileApps/cierre-calles/exportar-bandeja" target="response_export_excel">

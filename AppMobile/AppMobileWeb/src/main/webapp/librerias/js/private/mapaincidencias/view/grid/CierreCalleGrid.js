@@ -167,8 +167,8 @@
 							                   																		
 							                    Ext.create('Ext.window.Window', {
 												    title: 'Ubicación Georeferencial',
-												    height: 500,
-												    width: 850,
+												    height: (IS_CONSULTA?410:500),
+												    width: (IS_CONSULTA?720:850),
 												    modal:true,
 												    id:'win-panel-mapa',
 												    layout: 'fit',
@@ -205,16 +205,21 @@
 						this.store = store;
 						
 						store.on('load',function(){
+							if(Ext.getCmp('btnEditarCierreCalle')){
+								Ext.getCmp('btnEditarCierreCalle').setDisabled(true);
+							}
 							
-							Ext.getCmp('btnEditarCierreCalle').setDisabled(true);
-							Ext.getCmp('btnEliminarCierreCalle').setDisabled(true);
-							
+							if(Ext.getCmp('btnEliminarCierreCalle')){
+								Ext.getCmp('btnEliminarCierreCalle').setDisabled(true);
+							}
 						});
+						
 						
 						var hideButons = IS_CONSULTA;
 						
 						this.columns = this.getColumnas();
 
+						if(!IS_CONSULTA){
 						this.dockedItems = {
 							xtype : 'toolbar',
 							items : [
@@ -372,6 +377,8 @@
 									}
 										]
 						};
+						
+					}
 
 						this.bbar = Ext.create('Ext.PagingToolbar', {
 							store : store,
