@@ -1592,7 +1592,7 @@ var FormularioCierreCalles = {
 		                    boxLabel  : '<span style="font-weight: normal;">Visible?</span>',
 		                    name      : 'visible',
 		                    inputValue: 'S',
-		                    hidden : (parent.IDE_ROL_MAIN_JSP == 6?false:true),
+//		                    hidden : (parent.IDE_ROL_MAIN_JSP == 6?false:true),
 		                    id        : 'chkVisible',
 		                    xtype:'checkboxfield',
 		                    boxLabelAlign :'before',
